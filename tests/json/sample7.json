@@ -1,10 +1,13 @@
 {
-    "data": {},
+    "data": {
+        "relative_path": "..\\..\\..\\..\\..\\..\\..\\ProgramData\\V\u041a_DJ\\V\u041a_DJ.exe",
+        "working_directory": "C:\\ProgramData\\V\u041a_DJ"
+    },
     "extra": {
         "METADATA_PROPERTIES_BLOCK": {
-            "format_id": "9F4C2855-9F79-4B39-A8D0-0000EDF5D5F3",
-            "size": 483,
-            "storage_size": 471,
+            "format_id": "46588AE2-4CBC-4338-BBFC-139326986DCE",
+            "size": 40,
+            "storage_size": 28,
             "version": "0x53505331"
         }
     },
@@ -19,12 +22,14 @@
         "icon_index": 0,
         "link_flags": [
             "HasTargetIDList",
+            "HasRelativePath",
+            "HasWorkingDir",
             "IsUnicode"
         ],
         "modified_time": null,
         "r_file_flags": 0,
         "r_hotkey": 0,
-        "r_link_flags": 129,
+        "r_link_flags": 153,
         "reserved0": 0,
         "reserved1": 0,
         "reserved2": 0,
@@ -36,17 +41,25 @@
         "items": [
             {
                 "class": "Root Folder",
-                "guid": "20D04FE0-3AEA-1069-A2D8-00002B30309D",
+                "guid": "20D04FE0-3AEA-1069-A2D8-08002B30309D",
                 "sort_index": "My Computer"
             },
             {
                 "class": "Volume Item",
-                "data": "",
-                "flags": "0xe"
+                "data": "C:\\",
+                "flags": "0xf"
+            },
+            {
+                "class": "File entry",
+                "file_attribute_flags": 16,
+                "file_size": 0,
+                "flags": "Is directory",
+                "modification_time": null,
+                "primary_name": "ProgramData"
             },
             null,
             null
         ],
-        "size": 2556
+        "size": 321
     }
 }

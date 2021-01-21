@@ -1,34 +1,27 @@
 {
     "data": {
-        "command_line_arguments": "no_ipcheck no_resize",
-        "relative_path": ".\\AnonymusBrowser.exe",
-        "working_directory": "C:\\AnonymusBrowser-v2.0"
+        "relative_path": ".\\a.txt",
+        "working_directory": "C:\\test"
     },
     "extra": {
         "DISTRIBUTED_LINK_TRACKER_BLOCK": {
-            "birth_droid_file_identifier": "06CC9568-BF32-11EA-ABA1-0000FAAD700E",
-            "birth_droid_volume_identifier": "2EBF7902-EDAA-43D6-A855-0000F7BABFF2",
-            "droid_file_identifier": "06CC9568-BF32-11EA-ABA1-0000FAAD700E",
-            "droid_volume_identifier": "2EBF7902-EDAA-43D6-A855-0000F7BABFF2",
+            "birth_droid_file_identifier": "7BCD46EC-7F22-11DD-9499-00137216874A",
+            "birth_droid_volume_identifier": "94C77840-FA47-46C7-B356-5C2DC6B6D115",
+            "droid_file_identifier": "7BCD46EC-7F22-11DD-9499-00137216874A",
+            "droid_volume_identifier": "94C77840-FA47-46C7-B356-5C2DC6B6D115",
             "length": 88,
-            "machine_identifier": "desktop-73cl5qt",
+            "machine_identifier": "chris-xps",
             "size": 96,
             "version": 0
-        },
-        "METADATA_PROPERTIES_BLOCK": {
-            "format_id": "DABD30ED-0043-4789-A7F8-0000F4736622",
-            "size": 484,
-            "storage_size": 97,
-            "version": "0x53505331"
         }
     },
     "header": {
-        "accessed_time": "2020-07-06T04:18:49+00:00",
-        "creation_time": "2020-07-03T22:51:57+00:00",
+        "accessed_time": "2008-09-12T20:27:17+00:00",
+        "creation_time": "2008-09-12T20:27:17+00:00",
         "file_flags": [
             "FILE_ATTRIBUTE_ARCHIVE"
         ],
-        "file_size": 1490944,
+        "file_size": 0,
         "guid": "00021401-0000-0000-C000-000000000046",
         "header_size": 76,
         "hotkey": "UNSET - UNSET {0x0000}",
@@ -38,14 +31,13 @@
             "HasLinkInfo",
             "HasRelativePath",
             "HasWorkingDir",
-            "HasArguments",
             "IsUnicode",
             "EnableTargetMetadata"
         ],
-        "modified_time": "2020-07-06T04:18:49+00:00",
+        "modified_time": "2008-09-12T20:27:17+00:00",
         "r_file_flags": 32,
         "r_hotkey": 0,
-        "r_link_flags": 524475,
+        "r_link_flags": 524443,
         "reserved0": 0,
         "reserved1": 0,
         "reserved2": 0,
@@ -54,15 +46,15 @@
     "link_info": {
         "common_network_relative_link_offset": 0,
         "common_path_suffix": "",
-        "common_path_suffix_offset": 89,
+        "common_path_suffix_offset": 59,
         "link_info_flags": 1,
         "link_info_header_size": 28,
-        "link_info_size": 90,
-        "local_base_path": "C:\\AnonymusBrowser-v2.0\\AnonymusBrowser.exe",
+        "link_info_size": 60,
+        "local_base_path": "C:\\test\\a.txt",
         "local_base_path_offset": 45,
         "location": "Local",
         "location_info": {
-            "drive_serial_number": "0xd215cbdb",
+            "drive_serial_number": "0x307a8a81",
             "drive_type": "DRIVE_FIXED",
             "r_drive_type": 3,
             "volume_id_size": 17,
@@ -76,7 +68,7 @@
         "items": [
             {
                 "class": "Root Folder",
-                "guid": "20D04FE0-3AEA-1069-A2D8-00002B30309D",
+                "guid": "20D04FE0-3AEA-1069-A2D8-08002B30309D",
                 "sort_index": "My Computer"
             },
             {
@@ -89,18 +81,18 @@
                 "file_attribute_flags": 16,
                 "file_size": 0,
                 "flags": "Is directory",
-                "modification_time": "1997-10-07T10:07:12+00:00",
-                "primary_name": "ANONYM~1.0"
+                "modification_time": "2061-11-09T07:09:24+00:00",
+                "primary_name": "test"
             },
             {
                 "class": "File entry",
                 "file_attribute_flags": 32,
-                "file_size": 1490944,
+                "file_size": 0,
                 "flags": "Is file",
-                "modification_time": "1997-02-25T10:07:12+00:00",
-                "primary_name": "ANONYM~1.EXE"
+                "modification_time": "2061-11-09T07:09:24+00:00",
+                "primary_name": "a.txt"
             }
         ],
-        "size": 279
+        "size": 189
     }
 }
