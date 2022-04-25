@@ -39,7 +39,7 @@ pip install LnkParse3
 Can be used as a package or as a command line tool. It accepts several arguments, including setting the output format to JSON or a more human-readable form. For all parameters, see the program description below.
 
 ```
-usage: lnkparse [-h] [-t] [-j] [-c CP] [-a] FILE
+sage: lnkparse [-h] [-t] [-d DUMP] [-j] [-c CP] [-a] FILE
 
 Windows Shortcut file (LNK) parser
 
@@ -48,7 +48,8 @@ positional arguments:
 
 optional arguments:
   -h, --help            show this help message and exit
-  -t, --target          print target only
+  -t, --target          print shortcut target only
+  -d DUMP, --dump DUMP  dump additional data to a file
   -j, --json            print output in JSON
   -c CP, --codepage CP  set codepage of ASCII strings
   -a, --all             print all extracted data (i.e. offsets and sizes)
