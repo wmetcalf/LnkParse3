@@ -15,17 +15,58 @@ from LnkParse3.lnk_info import LnkInfo
 from LnkParse3.info_factory import InfoFactory
 from LnkParse3.string_data import StringData
 from LnkParse3.extra_data import ExtraData
+import string 
 
+## Taken from CAPE ####
+# Don't allow all characters in "string.printable", as newlines, carriage
+# returns, tabs, \x0b, and \x0c may mess up reports.
+# The above is true, but apparently we only care about \x0b and \x0c given
+# the code below
+PRINTABLE_CHARACTERS = string.ascii_letters + string.digits + string.punctuation + " \t\r\n"
+def convert_char(c):
+    """Escapes characters.
+    @param c: dirty char.
+    @return: sanitized char.
+    """
+    if c in PRINTABLE_CHARACTERS:
+        return c
+    else:
+        return "\\x%02x" % ord(c)
+
+
+def is_printable(s):
+    """Test if a string is printable."""
+    for c in s:
+        if c not in PRINTABLE_CHARACTERS:
+            return False
+    return True
+
+
+def convert_to_printable(s, cache=None):
+    # setproctitle("{0} <{1}>".format(getproctitle().split(" <")[0],sys._getframe().f_code.co_name))
+    """Convert char to printable.
+    @param s: string.
+    @param cache: an optional cache
+    @return: sanitized string.
+    """
+    if is_printable(s):
+        return s
+
+    if cache is None:
+        return "".join(convert_char(c) for c in s)
+    elif not s in cache:
+        cache[s] = "".join(convert_char(c) for c in s)
+    return cache[s]
 
 class LnkFile(object):
-    def __init__(self, fhandle=None, indata=None, cp=None):
+    def __init__(self, fhandle=None, indata=None, cp=None, dump=None):
         if fhandle:
             self.indata = fhandle.read()
         elif indata:
             self.indata = indata
 
         self.cp = cp
-
+        self.dump = dump
         self.process()
 
     def has_relative_path(self):
@@ -86,7 +127,13 @@ class LnkFile(object):
 
         # Parse Extra Data
         self.extras = ExtraData(indata=self.indata[index:], cp=self.cp)
-
+        extras_dict = self.extras.as_dict()
+        if extras_dict.get('TERMINAL_BLOCK',{}).get('extra_garbage',b'') and self.dump:
+            try:
+                with open(self.dump,'w+b') as f:
+                    f.write(extras_dict.get('TERMINAL_BLOCK',{}).get('extra_garbage',b''))
+            except:
+                pass
     def print_lnk_file(self, print_all=False):
         def cprint(text, level=0):
             SPACING = 3
@@ -257,6 +304,11 @@ class LnkFile(object):
         for extra_key, extra_value in self.extras.as_dict().items():
             cprint(f"{extra_key}", 2)
             for key, value in extra_value.items():
+                if key == "extra_garbage":
+                    try:
+                        value = convert_to_printable(value.decode('utf-8','ignore'))
+                    except:
+                        pass
                 cprint(f"{nice_id(key)}: {value}", 3)
 
     def format_linkFlags(self):
@@ -289,7 +341,6 @@ class LnkFile(object):
 
     def print_json(self, print_all=False):
         res = self.get_json(print_all)
-
         def _datetime_to_str(obj):
             if isinstance(obj, datetime.datetime):
                 return obj.replace(microsecond=0).isoformat()
@@ -302,6 +353,7 @@ class LnkFile(object):
                 separators=(",", ": "),
                 default=_datetime_to_str,
                 sort_keys=True,
+                #check_circular=False
             )
         )
 
@@ -330,6 +382,8 @@ class LnkFile(object):
             "extra": self.extras.as_dict(),
         }
 
+        if res.get("extra",{}).get("TERMINAL_BLOCK",{}).get("extra_garbage",b''):
+            res["extra"]["TERMINAL_BLOCK"]["extra_garbage"] = convert_to_printable(res.get("extra",{}).get("TERMINAL_BLOCK",{}).get("extra_garbage",b'').decode('utf-8','ignore'))
         if self.targets:
             res["target"] = {
                 "size": self.targets.id_list_size(),
@@ -474,9 +528,15 @@ def main():
     arg_parser.add_argument(
         "-t", "--target", action="store_true", help="print shortcut target only"
     )
+
+    arg_parser.add_argument(
+        "-d", "--dump", dest="dump", default=None, help="dump additional data to a file"
+    )
+
     arg_parser.add_argument(
         "-j", "--json", action="store_true", help="print output in JSON"
     )
+
     arg_parser.add_argument(
         "-c",
         "--codepage",
@@ -494,7 +554,7 @@ def main():
     args = arg_parser.parse_args()
 
     with open(args.file, "rb") as file:
-        lnk = LnkFile(fhandle=file, cp=args.cp)
+        lnk = LnkFile(fhandle=file, cp=args.cp, dump=args.dump)
         if args.target:
             lnk.print_shortcut_target(pjson=args.json)
         elif args.json:

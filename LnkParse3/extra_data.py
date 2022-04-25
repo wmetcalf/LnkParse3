@@ -25,12 +25,17 @@ class ExtraData:
 
             if not size:
                 break
-
+            
             data, rest = rest[:size], rest[size:]
-
             cls = factory.extra_class()
             if cls:
                 yield cls(indata=data, cp=self.cp)
+
+        #terminal block
+        if len(rest) > 4 and rest[0:4] == b"\x00\x00\x00\x00": 
+            cls = factory.extra_class()
+            if cls:
+                yield cls(indata=rest, cp=self.cp)
 
     def as_dict(self):
         res = {}

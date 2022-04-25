@@ -10,6 +10,7 @@ from LnkParse3.extra.shim_layer import ShimLayer
 from LnkParse3.extra.metadata import Metadata
 from LnkParse3.extra.known_folder import KnownFolder
 from LnkParse3.extra.shell_item import ShellItem
+from LnkParse3.extra.terminal_block import TerminalBlock
 
 """
 ------------------------------------------------------------------
@@ -35,14 +36,17 @@ class ExtraFactory:
         "a0000009": Metadata,
         "a000000b": KnownFolder,
         "a000000c": ShellItem,
+        "00000000": TerminalBlock,
     }
 
     def __init__(self, indata):
         self._raw = indata
+        self.size = 0
 
     def item_size(self):
         start, end = 0, 4
         size = unpack("<I", self._raw[start:end])[0]
+        self.size = size
         return size
 
     def _rsig(self):
@@ -51,5 +55,8 @@ class ExtraFactory:
         return rsig
 
     def extra_class(self):
-        sig = str(hex(self._rsig()))[2:]  # huh?
+        if self.size != 0:
+            sig = str(hex(self._rsig()))[2:]  # huh?
+        else: 
+            sig = "00000000"
         return self.EXTRA_SIGS.get(sig)
