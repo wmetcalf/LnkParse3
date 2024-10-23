@@ -36,7 +36,7 @@ class LnkTargetBase:
         self.text_processor = TextProcessor(cp=self.cp)
 
         start = self.SIZE_OF_TARGET_SIZE
-        end = start + self.size()
+        end = self.size()
         self._raw_target = self._raw[start:end]
 
     def as_item(self):

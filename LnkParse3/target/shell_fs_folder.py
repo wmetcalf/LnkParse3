@@ -1,5 +1,7 @@
 from struct import unpack
 from LnkParse3.target.lnk_target_base import LnkTargetBase
+from LnkParse3.extension_blocks import ExtensionBlocks
+from LnkParse3.extension.file_entry import FileEntry
 from LnkParse3.decorators import dostime
 
 """
@@ -31,15 +33,31 @@ class ShellFSFolder(LnkTargetBase):
     def __init__(self, *args, **kwargs):
         self.name = "File entry"
         super().__init__(*args, **kwargs)
+        self._extensions = None
+
+    def extensions(self):
+        if self._extensions is None:
+            self._extensions = ExtensionBlocks(indata=self._raw, cp=self.cp).as_dict()
+
+        return self._extensions
 
     def as_item(self):
         item = super().as_item()
         try:
             item["flags"] = self.flags()
             item["file_size"] = self.file_size()
+            creation_time = self.creation_time()
+            if creation_time:
+                item["creation_time"] = self.creation_time()
             item["modification_time"] = self.modification_time()
+            last_access_time = self.last_access_time()
+            if last_access_time:
+                item["last_access_time"] = self.last_access_time()
             item["file_attribute_flags"] = self.file_attribute_flags()
             item["primary_name"] = self.primary_name()
+            secondary_name = self.secondary_name()
+            if secondary_name:
+                item["secondary_name"] = secondary_name
         except KeyError:
             # FIXME This try-catch is just a hot-fix.
             # We should probably solve failing attributes in a better way.
@@ -82,8 +100,25 @@ class ShellFSFolder(LnkTargetBase):
 
     # https://github.com/libyal/libfwsi/blob/master/documentation/Windows%20Shell%20Item%20format.asciidoc#341-file-entry-shell-item--pre-windows-xp
     def secondary_name(self):
-        # TODO:
-        pass
+        file_entry = self.extensions().get(FileEntry.name())
+        if not file_entry:
+            return None
+
+        return file_entry.get("long_name")
+
+    def creation_time(self):
+        file_entry = self.extensions().get(FileEntry.name())
+        if not file_entry:
+            return None
+
+        return file_entry.get("creation_time")
+
+    def last_access_time(self):
+        file_entry = self.extensions().get(FileEntry.name())
+        if not file_entry:
+            return None
+
+        return file_entry.get("last_access_time")
 
     def shell_folder_identifier(self):
         # TODO:
