@@ -331,6 +331,15 @@ class LnkFile(object):
         if self.has_link_info():
             out.append(self.info.local_base_path() or "")
 
+        if self.has_arguments():
+            out.append(self.string_data.command_line_arguments())
+
+        return " ".join(out)
+
+    @property
+    def lnk_command_alt(self):
+        out = []
+
         if self.has_target_id_list():
             keys_by_class = {
                 "File entry": ["secondary_name", "primary_name"],
@@ -353,11 +362,13 @@ class LnkFile(object):
 
     def print_shortcut_target(self, pjson=False):
         out = self.lnk_command
+        out_alt = self.lnk_command_alt
 
         if pjson:
-            print(json.dumps({"shortcut_target": out}))
+            print(json.dumps({"shortcut_target": out, "shortcut_target_alt": out_alt}))
         else:
             print(out)
+            print(out_alt)
 
     def print_json(self, print_all=False):
         res = self.get_json(print_all)
