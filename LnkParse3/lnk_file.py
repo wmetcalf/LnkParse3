@@ -317,14 +317,34 @@ class LnkFile(object):
     def format_fileFlags(self):
         return " | ".join(self.header.file_flags())
 
-    # FIXME: Simple concat of path and arguments
     @property
     def lnk_command(self):
         out = []
 
+        if self.has_working_dir():
+            out.append(self.string_data.working_directory() or "")
+
         if self.has_relative_path():
-            relative_path = self.string_data.relative_path()
+            relative_path = self.string_data.relative_path() or ""
             out.append(list2cmdline([relative_path]))
+
+        if self.has_link_info():
+            out.append(self.info.local_base_path() or "")
+
+        if self.has_target_id_list():
+            keys_by_class = {
+                "File entry": ["secondary_name", "primary_name"],
+                "Network location": ["location"],
+                "Volume Item": ["name"],
+            }
+            target_path_segments = []
+            for target in self.targets.as_list():
+                for key in keys_by_class.get(target.get("class"), []):
+                    segment = target.get(key)
+                    if segment:
+                        target_path_segments.append(segment.rstrip("\\"))
+                        break
+            out.append("\\".join(target_path_segments))
 
         if self.has_arguments():
             out.append(self.string_data.command_line_arguments())

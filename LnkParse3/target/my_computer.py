@@ -22,8 +22,10 @@ class MyComputer(LnkTargetBase):
 
     def as_item(self):
         item = super().as_item()
-        item["flags"] = self.flags()
-        item["data"] = self.data()
+        flags = self.flags()
+        item["flags"] = f"0x{flags:02X}"
+        if flags & 0x01:  # HasName
+            item["name"] = self.volume_name()
         return item
 
     # dup: ./shell_fs_folder.py flags()
@@ -32,8 +34,10 @@ class MyComputer(LnkTargetBase):
         flags = self.class_type_indicator()
 
         # FIXME: delete masking
-        # FIXME: hex() is only used here
-        return hex(flags & 0x0F)
+        return flags & 0x0F
 
-    def data(self):
-        return None
+    def volume_name(self):
+        start = 1
+        binary = self._raw_target[start:]
+        text = self.text_processor.read_string(binary)
+        return text
